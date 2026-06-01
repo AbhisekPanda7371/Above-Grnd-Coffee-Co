@@ -1,0 +1,186 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --ink:          #0d0d0d;
+  --brown-dark:   #2c1810;
+  --brown-mid:    #5c3d2e;
+  --brown-light:  #c9a882;
+  --gold:         #c9a84c;
+  --gold-bright:  #e8c84a;
+  --moss:         #2c3e2b;
+  --cream:        #fdf6ee;
+  --glass-white:  rgba(255,255,255,0.38);
+  --glass-border: rgba(255,255,255,0.68);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing:  antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-size: 16px;
+}
+
+body {
+  overflow-x: hidden;
+  color: var(--ink);
+  font-family: var(--font-jost), "Helvetica Neue", sans-serif;
+  font-weight: 400;   /* 400 not 300 — readable, not robotic */
+  line-height: 1.75;
+}
+
+/* ── Accessible focus ring — visible for keyboard nav ── */
+:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ── Font utilities ── */
+.font-playfair  { font-family: var(--font-playfair),  "Georgia", serif; }
+.font-cormorant { font-family: var(--font-cormorant), "Georgia", serif; }
+.font-jost      { font-family: var(--font-jost),      "Helvetica Neue", sans-serif; }
+/* Legacy aliases — kept for backward compat */
+.font-syne      { font-family: var(--font-cormorant), "Georgia", serif; }
+.font-inter     { font-family: var(--font-jost),      "Helvetica Neue", sans-serif; }
+
+/* ── Body text defaults — warmer, more readable ── */
+p { line-height: 1.85; }
+h1,h2,h3 { letter-spacing: -0.02em; line-height: 1.1; }
+
+/* ── Glassmorphism ── */
+.glass {
+  background:          rgba(255,255,255,0.42);
+  backdrop-filter:     blur(20px) saturate(1.4);
+  -webkit-backdrop-filter: blur(20px) saturate(1.4);
+  border:              1.5px solid rgba(255,255,255,0.72);
+  box-shadow:          0 4px 24px rgba(44,24,16,0.06);
+}
+
+/* ── Buttons ── */
+.btn-dark {
+  display:         inline-flex;
+  align-items:     center;
+  gap:             8px;
+  background:      var(--brown-dark);
+  color:           #fff;
+  border:          1.5px solid transparent;
+  border-radius:   50px;
+  padding:         13px 32px;
+  font-family:     var(--font-cormorant), serif;
+  font-size:       0.85rem;
+  font-weight:     600;
+  letter-spacing:  0.08em;
+  text-transform:  uppercase;
+  text-decoration: none;
+  cursor:          pointer;
+  transition:      background 0.3s, transform 0.25s, box-shadow 0.3s, border-color 0.3s;
+}
+.btn-dark:hover {
+  background:   var(--gold);
+  border-color: var(--gold);
+  transform:    translateY(-2px);
+  box-shadow:   0 14px 36px rgba(201,168,76,0.38);
+}
+
+.btn-outline {
+  display:         inline-flex;
+  align-items:     center;
+  background:      rgba(255,255,255,0.5);
+  backdrop-filter: blur(12px);
+  color:           var(--brown-dark);
+  border:          1.5px solid rgba(255,255,255,0.8);
+  border-radius:   50px;
+  padding:         13px 32px;
+  font-family:     var(--font-cormorant), serif;
+  font-size:       0.85rem;
+  font-weight:     600;
+  letter-spacing:  0.08em;
+  text-transform:  uppercase;
+  text-decoration: none;
+  cursor:          pointer;
+  transition:      background 0.3s, box-shadow 0.3s;
+}
+.btn-outline:hover { background: rgba(255,255,255,0.82); box-shadow: 0 8px 24px rgba(44,24,16,0.08); }
+
+/* ── Floating / entrance animations ── */
+@keyframes floatY {
+  0%,100% { transform: translateY(0px); }
+  50%     { transform: translateY(-14px); }
+}
+@keyframes floatSlow {
+  0%,100% { transform: translateY(0px) rotate(0deg); }
+  33%     { transform: translateY(-8px) rotate(4deg); }
+  66%     { transform: translateY(-4px) rotate(-2deg); }
+}
+@keyframes rotateSlow {
+  to { transform: rotate(360deg); }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+
+.float      { animation: floatY 4.5s ease-in-out infinite; }
+.float-slow { animation: floatSlow 6.5s ease-in-out infinite; }
+.rotate     { animation: rotateSlow 22s linear infinite; }
+
+/* ── Animation area hover glow ── */
+.anim-hover-wrap {
+  position:   relative;
+  cursor:     pointer;
+  transition: filter 0.4s ease, transform 0.4s cubic-bezier(0.23,1,0.32,1);
+}
+.anim-hover-wrap::after {
+  content:       '';
+  position:      absolute;
+  inset:         -12px;
+  border-radius: 50%;
+  background:    radial-gradient(ellipse at center,
+                   rgba(201,168,76,0.18) 0%,
+                   rgba(201,168,76,0.06) 50%,
+                   transparent 75%);
+  opacity:       0;
+  transition:    opacity 0.4s ease;
+  pointer-events:none;
+  z-index:       0;
+}
+.anim-hover-wrap:hover::after   { opacity: 1; }
+.anim-hover-wrap:hover          { filter: brightness(1.06) saturate(1.12); transform: scale(1.018); }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar       { width: 3px; }
+::-webkit-scrollbar-track { background: #f0e0cc; }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+::selection                { background: var(--gold); color: #fff; }
+
+/* ── GSAP hidden state ── */
+.g-hidden { opacity: 0; }
+
+/* ── Mobile base ── */
+@media (max-width: 768px) {
+  html { font-size: 15px; }
+  h1   { font-size: clamp(2.4rem, 10vw, 4.5rem) !important; }
+  h2   { font-size: clamp(1.8rem, 7vw, 3rem)   !important; }
+}
+
+/* ── Accessibility: respect reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration:   0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration:  0.01ms !important;
+    scroll-behavior:      auto  !important;
+  }
+  .float, .float-slow, .rotate { animation: none !important; }
+}
+
+/* ── Performance: GPU layers for animated elements ── */
+.float, .float-slow, .anim-hover-wrap, .glass {
+  will-change: transform;
+  transform:   translateZ(0);
+}
